@@ -40,6 +40,8 @@ biggestCities();
 smallestCities();
 biggestNameLengthCity();
 smallestNameLenghtCity();
+biggestNameCityOverAll();
+smallestNameCityOverAll();
 
 function createFiles() {
   for (let i = 0; i < allCountries.length; i++) {
@@ -129,4 +131,59 @@ async function smallestNameLenghtCity() {
   }
 
   console.log(tamanhos);
+}
+
+async function biggestNameCityOverAll() {
+  let tamanhos = [];
+
+  for (let i = 0; i < states.length; i++) {
+    const teste = await JSON.parse(
+      fs.readFileSync(`${states[i].substr(0, 2)}.json`)
+    );
+
+    tamanhos.push({
+      Cidade: teste
+        .map((cidade) => {
+          return cidade.Nome;
+        })
+        .sort((a, b) => {
+          return b.length - a.length;
+        })[0],
+
+      UF: states[i].substr(0, 2),
+    });
+  }
+  console.log(
+    tamanhos.sort((a, b) => {
+      return b.Cidade.length - a.Cidade.length;
+    })[0]
+  );
+}
+
+async function smallestNameCityOverAll() {
+  let tamanhos = [];
+
+  for (let i = 0; i < states.length; i++) {
+    const teste = await JSON.parse(
+      fs.readFileSync(`${states[i].substr(0, 2)}.json`)
+    );
+
+    tamanhos.push({
+      Cidade: teste
+        .map((cidade) => {
+          return cidade.Nome;
+        })
+        .sort((a, b) => {
+          return a.length - b.length;
+        })[0],
+
+      UF: states[i].substr(0, 2),
+    });
+  }
+
+  console.log(
+    tamanhos.sort((a, b) => {
+      return a.Cidade.length - b.Cidade.length;
+    })[0]
+  );
 }
